@@ -1,6 +1,6 @@
 const express = require('express');
 const { checkPermission } = require('./middleware/rbac');
-const { allRooms } = require('./mockData');
+const { allRooms, allUsers } = require('./mockData');
 const crypto = require('crypto');
 
 const router = express.Router();
@@ -75,13 +75,11 @@ module.exports = router;
 
 // GET /api/admin/users - Get all users
 router.get('/users', (req, res) => {
-    const { allUsers } = require('./mockData');
     res.json(allUsers);
 });
 
 // POST /api/admin/users - Manually create a new user
 router.post('/users', (req, res) => {
-    const { allUsers } = require('./mockData');
     const { name, email, role } = req.body;
     if (!name || !email || !role) {
         return res.status(400).json({ message: 'Name, email, and role are required.' });
@@ -99,7 +97,6 @@ router.post('/users', (req, res) => {
 
 // PUT /api/admin/users/:id/role - Update a user's role
 router.put('/users/:id/role', (req, res) => {
-    const { allUsers } = require('./mockData');
     const { id } = req.params;
     const { role } = req.body;
     if (!role) {
@@ -117,7 +114,6 @@ router.put('/users/:id/role', (req, res) => {
 
 // DELETE /api/admin/users/:id - Delete a user
 router.delete('/users/:id', (req, res) => {
-    let { allUsers } = require('./mockData'); // Use let to allow reassignment
     const { id } = req.params;
     const userIndex = allUsers.findIndex(u => u.id === id);
 
