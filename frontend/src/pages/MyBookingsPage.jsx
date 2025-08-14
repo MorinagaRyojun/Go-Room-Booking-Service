@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {
+  Typography, Box, Grid, Card, CardContent, CardActions,
+  Button, CircularProgress, Alert, Chip
+} from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 function MyBookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -33,12 +39,8 @@ function MyBookingsPage() {
       async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          const response = await axios.post(`/api/bookings/${bookingId}/checkin`, {
-            latitude,
-            longitude,
-          });
+          await axios.post(`/api/bookings/${bookingId}/checkin`, { latitude, longitude });
           alert('Check-in successful!');
-          // Update the booking status in the UI
           setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, checkedIn: true, status: 'Checked In' } : b));
         } catch (err) {
           alert(`Check-in failed: ${err.response?.data?.message || err.message}`);
@@ -50,29 +52,55 @@ function MyBookingsPage() {
     );
   };
 
+  const getStatusChip = (booking) => {
+    if (booking.checkedIn) {
+      return <Chip label="Checked In" color="success" icon={<CheckCircleIcon />} />;
+    }
+    switch (booking.status) {
+      case 'confirmed':
+        return <Chip label="Confirmed" color="primary" />;
+      case 'cancelled':
+        return <Chip label="Cancelled" color="error" />;
+      default:
+        return <Chip label={booking.status} />;
+    }
+  };
+
   return (
-    <div>
-      <h2>My Bookings</h2>
-      <p>Here are your upcoming and past bookings.</p>
+    <Box>
+      <Typography variant="h4" component="h1" gutterBottom>
+        My Bookings
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 3 }}>
+        Here are your upcoming and past bookings.
+      </Typography>
 
-      {isLoading && <p>Loading your bookings...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}><CircularProgress /></Box>}
+      {error && <Alert severity="error">{error}</Alert>}
+      {!isLoading && !error && bookings.length === 0 && <Alert severity="info">You have no bookings.</Alert>}
 
-      <div className="booking-list">
-        {!isLoading && !error && bookings.length === 0 && <p>You have no bookings.</p>}
+      <Grid container spacing={3}>
         {bookings.map(booking => (
-          <div key={booking.id} style={{ border: '1px solid #eee', padding: '1rem', marginTop: '1rem' }}>
-            <strong>Room ID: {booking.roomId}</strong>
-            <p>Start: {new Date(booking.startTime).toLocaleString()}</p>
-            <p>End: {new Date(booking.endTime).toLocaleString()}</p>
-            <p>Status: {booking.checkedIn ? 'Checked In' : booking.status}</p>
-            {!booking.checkedIn && booking.status === 'confirmed' && (
-              <button onClick={() => handleCheckIn(booking.id)}>Check-in</button>
-            )}
-          </div>
+          <Grid item xs={12} md={6} key={booking.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">Room ID: {booking.roomId}</Typography>
+                <Typography color="text.secondary">Start: {new Date(booking.startTime).toLocaleString()}</Typography>
+                <Typography color="text.secondary">End: {new Date(booking.endTime).toLocaleString()}</Typography>
+                <Box sx={{ mt: 1 }}>{getStatusChip(booking)}</Box>
+              </CardContent>
+              <CardActions>
+                {!booking.checkedIn && booking.status === 'confirmed' && (
+                  <Button size="small" startIcon={<LocationOnIcon />} onClick={() => handleCheckIn(booking.id)}>
+                    Check-in
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
+          </Grid>
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 }
 
