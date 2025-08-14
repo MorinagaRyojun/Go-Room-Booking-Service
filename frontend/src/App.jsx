@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-// Import page components (will be created in the next steps)
-import LoginPage from './pages/LoginPage';
-import RoomSearchPage from './pages/RoomSearchPage';
-import MyBookingsPage from './pages/MyBookingsPage';
+// Import page components
+import LoginPage from './pages/LoginPage.jsx';
+import RoomSearchPage from './pages/RoomSearchPage.jsx';
+import MyBookingsPage from './pages/MyBookingsPage.jsx';
 
 function App() {
   return (
