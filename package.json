@@ -1,0 +1,18 @@
+{
+  "name": "meeting-room-booking-root",
+  "version": "1.0.0",
+  "description": "Root package for the Meeting Room Booking System monorepo.",
+  "private": true,
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "test": "cd backend && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
