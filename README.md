@@ -25,53 +25,43 @@ The project is a monorepo organized into two main packages:
 -   Node.js (v16 or later recommended)
 -   npm
 
-### Backend Setup
+### 1. Installation
 
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend
-    ```
+From the project root directory, run the `install:all` script. This will install the dependencies for the root package, the backend, and the frontend all at once.
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+```bash
+npm run install:all
+```
 
-3.  **Set up environment variables:**
-    Create a file named `.env` in the `/backend` directory. It should contain the following secrets. You can get the client secret from your Eko application dashboard.
+### 2. Environment Variables
 
-    ```ini
-    # The client secret provided by Eko for your OAuth application
-    EKO_CLIENT_SECRET=your_eko_client_secret_here
+Before running the application, you must set up the necessary environment variables for the backend.
 
-    # A long, secure, and random string used to sign session cookies
-    SESSION_SECRET=a_long_secure_random_string_for_sessions
-    ```
+-   Navigate to the `/backend` directory.
+-   Create a new file named `.env`.
+-   Add the following content to the file. You can get the client secret from your Eko application dashboard.
 
-4.  **Run the server:**
-    The backend server will start on `http://localhost:3000`.
-    ```bash
-    npm start
-    ```
+```ini
+# The client secret provided by Eko for your OAuth application
+EKO_CLIENT_SECRET=your_eko_client_secret_here
 
-### Frontend Setup
+# A long, secure, and random string used to sign session cookies
+SESSION_SECRET=a_long_secure_random_string_for_sessions
+```
 
-1.  **Navigate to the frontend directory:**
-    ```bash
-    cd frontend
-    ```
+### 3. Running the Application
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+Once the installation and environment setup are complete, you can start the entire application with a single command from the project root.
 
-3.  **Run the development server:**
-    This command requires a development server like Vite or Parcel. The React application will typically start on a different port (e.g., `http://localhost:5173`) and is set up to make API calls to the backend server.
-    ```bash
-    # (Assuming a dev tool like Vite is configured)
-    npm run dev
-    ```
+```bash
+npm start
+```
+
+This will use `concurrently` to:
+-   Start the backend server (on `http://localhost:3000`).
+-   Start the frontend development server (typically on `http://localhost:5173`).
+
+You can now access the application by opening `http://localhost:5173` (or the URL provided by your frontend server) in your browser.
 
 ## Usage Guide
 
@@ -113,13 +103,8 @@ Once both the backend and frontend servers are running, you can use the applicat
 
 ## Running Tests
 
-The backend includes a suite of tests written with Jest and Supertest.
+The backend includes a suite of tests written with Jest and Supertest. You can run them from the project root directory:
 
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend
-    ```
-2.  **Run the test command:**
-    ```bash
-    npm test
-    ```
+```bash
+npm test
+```
