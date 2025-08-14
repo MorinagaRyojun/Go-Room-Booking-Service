@@ -1,18 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
-// --- Mock Database of Rooms ---
-const allRooms = [
-  { id: 'room101', name: 'Conference Room 101', building: 'A', floor: 1, capacity: 10 },
-  { id: 'room102', name: 'Focus Room 102', building: 'A', floor: 1, capacity: 4 },
-  { id: 'room205', name: 'Large Assembly Hall', building: 'B', floor: 2, capacity: 50 },
-  { id: 'room206', name: 'Small Meeting Room', building: 'B', floor: 2, capacity: 6 },
-];
-
-// --- Mock Database of Bookings ---
-const allBookings = [
-  { id: 'booking1', roomId: 'room101', startTime: '2025-09-01T10:00:00Z', endTime: '2025-09-01T11:00:00Z' },
-];
+const { allRooms, allBookings } = require('./mockData');
 
 /**
  * GET /api/rooms

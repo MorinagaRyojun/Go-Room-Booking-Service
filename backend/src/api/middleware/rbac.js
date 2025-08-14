@@ -43,11 +43,13 @@ const checkPermission = (requiredPermission) => {
         }
         break;
 
-      case 'manage_users':
-        // Example for another permission
+      case 'manage_users': // Kept for example
+      case 'manage_resources':
         if (user.role === 'admin') {
+          console.log('Admin permission granted.');
           next();
         } else {
+          console.log('Permission denied. Admin access required.');
           res.status(403).json({ message: 'Forbidden. Admin access required.' });
         }
         break;

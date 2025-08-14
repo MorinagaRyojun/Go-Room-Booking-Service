@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const axios = require('axios');
 const { decode } = require('jwt-decode');
 const config = require('../config');
+const { allUsers } = require('./mockData');
+const crypto = require('crypto');
 
 const router = express.Router();
 
@@ -57,17 +59,26 @@ router.get('/callback', async (req, res) => {
     // 3. Decode the ID token to get user info
     const decodedIdToken = decode(id_token);
 
-    // 4. Find or create a user in our database (mocking this part).
-    // Then, store essential user info in the session.
-    const userProfile = {
-      id: decodedIdToken.sub, // Use the 'sub' claim as a unique user ID
-      name: decodedIdToken.name,
-      email: decodedIdToken.email,
-      // In a real app, you'd look up the user's role from your database here.
-      role: 'manager', // Assigning a default role for now.
-    };
+    // 4. Find user in our database by their Eko ID. If they don't exist, create them.
+    const ekoId = decodedIdToken.sub;
+    let userProfile = allUsers.find(u => u.ekoId === ekoId);
 
-    // 5. Save user profile into the session
+    if (!userProfile) {
+      // User doesn't exist, create a new one
+      console.log(`Creating new user for Eko ID: ${ekoId}`);
+      userProfile = {
+        id: `user-${crypto.randomBytes(4).toString('hex')}`,
+        ekoId: ekoId,
+        name: decodedIdToken.name,
+        email: decodedIdToken.email,
+        role: 'employee', // Assign a default role for new users
+      };
+      allUsers.push(userProfile);
+    } else {
+      console.log(`Found existing user: ${userProfile.name}`);
+    }
+
+    // 5. Save the final user profile into the session
     req.session.user = userProfile;
     // Also save the access token if we need to make API calls to Eko on behalf of the user
     req.session.accessToken = access_token;
