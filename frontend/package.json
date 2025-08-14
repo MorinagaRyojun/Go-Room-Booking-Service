@@ -1,0 +1,19 @@
+{
+  "name": "meeting-room-booking-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the meeting room booking system.",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Run with a dev server like Vite or Parcel'",
+    "build": "echo 'Build with a bundler like Vite or Webpack'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
