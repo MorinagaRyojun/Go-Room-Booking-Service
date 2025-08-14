@@ -20,10 +20,12 @@ app.use(session({
 // Routes
 const roomsRouter = require('./api/rooms');
 const bookingsRouter = require('./api/bookings');
+const adminRouter = require('./api/admin');
 
 app.use('/api/auth', authRouter);
 app.use('/api/rooms', roomsRouter);
 app.use('/api/bookings', bookingsRouter);
+app.use('/api/admin', adminRouter);
 
 app.get('/', (req, res) => {
   res.send('Backend server is running! Welcome.');

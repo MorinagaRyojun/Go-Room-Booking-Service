@@ -1,10 +1,9 @@
 const express = require('express');
 const { checkPermission } = require('./middleware/rbac');
 const router = express.Router();
+const { allBookings } = require('./mockData');
 
-// --- Mock Database of Bookings ---
-const bookingsDB = [];
-let bookingCounter = 1;
+let bookingCounter = allBookings.length + 1;
 
 /**
  * POST /api/bookings
@@ -49,7 +48,7 @@ router.post('/', (req, res, next) => {
     console.log('MS Graph API Call: Creating calendar event without Teams meeting...');
   }
 
-  bookingsDB.push(newBooking);
+  allBookings.push(newBooking);
   console.log('New booking created:', newBooking);
 
   res.status(201).json(newBooking);
@@ -67,7 +66,7 @@ router.get('/me', (req, res) => {
   }
 
   // --- Placeholder for fetching user's bookings ---
-  const userBookings = bookingsDB.filter(b => b.userId === user.id);
+  const userBookings = allBookings.filter(b => b.userId === user.id);
 
   res.json(userBookings);
 });
@@ -89,7 +88,7 @@ router.post('/:id/checkin', (req, res) => {
   }
 
   // --- Mocking Database Lookups ---
-  const booking = bookingsDB.find(b => b.id === bookingId);
+  const booking = allBookings.find(b => b.id === bookingId);
   const mockRoom = {
     id: 'room101',
     name: 'Conference Room 101',

@@ -1,7 +1,6 @@
 const cron = require('node-cron');
 
-// In a real app, this would be a shared DB connection/model, not a separate mock DB.
-const { bookingsDB } = require('../api/bookings'); // This is not ideal, but works for mocking.
+const { allBookings } = require('../api/mockData');
 
 /**
  * A cron job that runs every minute to cancel bookings that missed their check-in time.
@@ -18,7 +17,7 @@ const startAutoReleaseJob = () => {
     // In a real app, this would be a single database query:
     // `Booking.updateMany({ status: 'confirmed', checkedIn: false, checkInDeadline: { $lt: now } }, { status: 'cancelled' })`
 
-    const bookingsToCancel = bookingsDB.filter(b =>
+    const bookingsToCancel = allBookings.filter(b =>
       b.status === 'confirmed' &&
       !b.checkedIn &&
       b.checkInDeadline &&
