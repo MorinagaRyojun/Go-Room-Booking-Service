@@ -69,8 +69,6 @@ router.delete('/rooms/:id', (req, res) => {
     res.status(204).send(); // No Content
 });
 
-module.exports = router;
-
 // --- User Management Routes ---
 
 // GET /api/admin/users - Get all users
@@ -124,3 +122,5 @@ router.delete('/users/:id', (req, res) => {
     allUsers.splice(userIndex, 1);
     res.status(204).send();
 });
+
+module.exports = router;
