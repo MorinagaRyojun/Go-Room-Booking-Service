@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {
+  TextField, Button, Typography, Paper, Box, Grid,
+  Card, CardContent, CardActions, CircularProgress, Alert
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 function RoomSearchPage() {
   const [rooms, setRooms] = useState([]);
@@ -11,7 +17,6 @@ function RoomSearchPage() {
     setIsLoading(true);
     setError(null);
     try {
-      // Use query parameters to send filter data to the backend
       const response = await axios.get('/api/rooms', { params: filters });
       setRooms(response.data);
     } catch (err) {
@@ -22,7 +27,6 @@ function RoomSearchPage() {
     }
   };
 
-  // Fetch rooms on initial component load
   useEffect(() => {
     fetchRooms();
   }, []);
@@ -39,10 +43,9 @@ function RoomSearchPage() {
 
   const handleBookNow = async (roomId) => {
     try {
-      // This is a simplified booking request.
       const response = await axios.post('/api/bookings', {
         roomId: roomId,
-        startTime: new Date().toISOString(), // Using placeholder times for now
+        startTime: new Date().toISOString(),
         endTime: new Date(new Date().getTime() + 60 * 60 * 1000).toISOString(),
         createTeamsMeeting: true,
       });
@@ -53,31 +56,54 @@ function RoomSearchPage() {
   };
 
   return (
-    <div>
-      <h2>Find a Meeting Room</h2>
+    <Box>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Find a Meeting Room
+      </Typography>
 
-      <form onSubmit={handleSearch} style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc' }}>
-        <h4>Filters</h4>
-        <input name="building" value={filters.building} onChange={handleFilterChange} placeholder="Building (e.g., A)" />
-        <input name="floor" value={filters.floor} onChange={handleFilterChange} placeholder="Floor (e.g., 1)" style={{ marginLeft: '1rem' }}/>
-        <button type="submit" style={{ marginLeft: '1rem' }}>Search</button>
-      </form>
+      <Paper component="form" onSubmit={handleSearch} sx={{ p: 2, mb: 4 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={5}>
+            <TextField fullWidth name="building" label="Building (e.g., A)" value={filters.building} onChange={handleFilterChange} />
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField fullWidth name="floor" label="Floor (e.g., 1)" value={filters.floor} onChange={handleFilterChange} />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <Button fullWidth type="submit" variant="contained" startIcon={<SearchIcon />}>
+              Search
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
 
-      <div className="results">
-        <h4>Available Rooms</h4>
-        {isLoading && <p>Loading...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {!isLoading && !error && rooms.length === 0 && <p>No available rooms match your criteria.</p>}
-        {rooms.map(room => (
-          <div key={room.id} style={{ border: '1px solid #eee', padding: '1rem', marginTop: '1rem' }}>
-            <strong>{room.name}</strong>
-            <p>Building: {room.building}, Floor: {room.floor}</p>
-            <p>Capacity: {room.capacity}</p>
-            <button onClick={() => handleBookNow(room.id)}>Book Now</button>
-          </div>
-        ))}
-      </div>
-    </div>
+      <Box className="results">
+        <Typography variant="h5" component="h2" gutterBottom>
+          Available Rooms
+        </Typography>
+        {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}><CircularProgress /></Box>}
+        {error && <Alert severity="error">{error}</Alert>}
+        {!isLoading && !error && rooms.length === 0 && <Alert severity="info">No available rooms match your criteria.</Alert>}
+        <Grid container spacing={3}>
+          {rooms.map(room => (
+            <Grid item xs={12} sm={6} md={4} key={room.id}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" component="div">{room.name}</Typography>
+                  <Typography color="text.secondary">Building: {room.building}, Floor: {room.floor}</Typography>
+                  <Typography color="text.secondary">Capacity: {room.capacity}</Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" startIcon={<EventAvailableIcon />} onClick={() => handleBookNow(room.id)}>
+                    Book Now
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Box>
   );
 }
 

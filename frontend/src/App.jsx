@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link as RouterLink } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Container, CssBaseline, Box } from '@mui/material';
 
 // Import page components
 import LoginPage from './pages/LoginPage.jsx';
@@ -9,21 +10,27 @@ import MyBookingsPage from './pages/MyBookingsPage.jsx';
 function App() {
   return (
     <BrowserRouter>
-      <div>
-        <nav style={{ padding: '1rem', background: '#f0f0f0' }}>
-          <Link to="/login" style={{ marginRight: '1rem' }}>Login</Link>
-          <Link to="/search" style={{ marginRight: '1rem' }}>Search Rooms</Link>
-          <Link to="/bookings">My Bookings</Link>
-        </nav>
-        <main style={{ padding: '1rem' }}>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Meeting Room Booking
+          </Typography>
+          <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+          <Button color="inherit" component={RouterLink} to="/search">Search Rooms</Button>
+          <Button color="inherit" component={RouterLink} to="/bookings">My Bookings</Button>
+        </Toolbar>
+      </AppBar>
+      <Container component="main" sx={{ mt: 4, mb: 4 }}>
+        <Box>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/search" element={<RoomSearchPage />} />
             <Route path="/bookings" element={<MyBookingsPage />} />
             <Route path="/" element={<RoomSearchPage />} /> {/* Default route */}
           </Routes>
-        </main>
-      </div>
+        </Box>
+      </Container>
     </BrowserRouter>
   );
 }
