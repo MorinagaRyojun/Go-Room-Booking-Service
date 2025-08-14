@@ -4,7 +4,6 @@ const axios = require('axios');
 const { decode } = require('jwt-decode');
 const config = require('../config');
 const { allUsers } = require('./mockData');
-const crypto = require('crypto');
 
 const router = express.Router();
 
